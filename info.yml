@@ -62,7 +62,7 @@ configuration:
                                  temp export paths, job paths and log file paths
                     default_value: {}
 
-        decription: Specify all other outputs that are supported.
+        description: Specify all other outputs that are supported.
                     All non-primary items returned from the scan scene hook must match
                     up with one of these secondary types
 

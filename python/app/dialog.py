@@ -15,13 +15,13 @@ class AppDialog(QtGui.QWidget):
         self._app = app
         self._outputs = []
 
-        #fail safe for unsaved work
+        # fail safe for unsaved work
         try:
             self.attributes = self._app.execute_hook('hook_pre_submit')
             self.show_render_dlg()
             self._outputs = [PublishOutput(self._app, output) for output in self._app.get_setting("outputs")]
             self._populate_output_list()
-        except TankError, e:
+        except TankError as e:
             QtGui.QMessageBox.information(None, "Unable To Submit!", "%s" % e)
         except Exception as e:
             print(e)
@@ -54,30 +54,30 @@ class AppDialog(QtGui.QWidget):
 
                 self.data_outputs.append(data)
 
-        #is anything selected?
+        # is anything selected?
         if len(self.data_outputs) != 0:
-            #showing progress page
+            # showing progress page
             self.ui.central_stackedWidget.setCurrentWidget(self.ui.progress_page)
 
-            #execute hook
+            # execute hook
             QtCore.QTimer.singleShot(1, self.execute_submit_hook)
         else:
             QtGui.QMessageBox.information(None, "Unable To Submit!", "No items were selected to submit!")
 
     def execute_submit_hook(self):
-        #execute hook
+        # execute hook
         errors = self._app.execute_hook("hook_submit",
                                         app=self._app,
                                         outputs=self.data_outputs,
                                         widget=self.ui)
 
-        #success or failure?
+        # success or failure?
         if len(errors) == 0:
             self.ui.central_stackedWidget.setCurrentWidget(self.ui.success_page)
         else:
             self.ui.central_stackedWidget.setCurrentWidget(self.ui.failure_page)
 
-            #generate errors report
+            # generate errors report
             report = ''
             for output in errors:
                 for error in output['errors']:
@@ -90,10 +90,10 @@ class AppDialog(QtGui.QWidget):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
 
-        #making sure submit page is showing
+        # making sure submit page is showing
         self.ui.central_stackedWidget.setCurrentWidget(self.ui.submit_page)
 
-        #populate job attributes
+        # populate job attributes
         row = 0
         for item in self.attributes:
             if not item.get('hidden', False):
@@ -122,7 +122,7 @@ class AppDialog(QtGui.QWidget):
 
                 row += 1
 
-        #connecting buttons to methods
+        # connecting buttons to methods
         self.ui.submit_btn.released.connect(self.submit_btn_released)
         self.ui.cancel_btn.released.connect(self.close)
         self.ui.success_close_btn.released.connect(self.close)

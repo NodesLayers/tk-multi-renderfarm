@@ -11,6 +11,7 @@
 
 import tank
 
+
 class PublishOutput(object):
     """
     Encapsulate an output definition as
